@@ -3,6 +3,8 @@ package mock
 import (
 	"net/http"
 
+	"encoding/json"
+
 	"github.com/gorilla/mux"
 	cw "github.com/techmexdev/competitive_writing_api"
 	"github.com/unrolled/render"
@@ -33,6 +35,11 @@ func (m *mock) routes() {
 	m.router.HandleFunc("/selection", m.handleSelections()).Methods("GET")
 }
 
+func writeJSON(w http.ResponseWriter, data interface{}) {
+	b, _ := json.MarshalIndent(data, "", "  ")
+	w.Write(b)
+}
+
 func (m *mock) handleAuthSignup() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -48,7 +55,7 @@ func (m *mock) handleAuthLogin() http.HandlerFunc {
 func (m *mock) handlePassages() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pp, _ := m.store.Passage.List()
-		m.render.JSON(w, http.StatusOK, pp)
+		writeJSON(w, pp)
 	}
 }
 
@@ -56,14 +63,14 @@ func (m *mock) handleAnalysiss() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		aa, _ := m.store.Analysis.List()
-		m.render.JSON(w, http.StatusOK, aa)
+		writeJSON(w, aa)
 	}
 }
 
 func (m *mock) handleSelections() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ss, _ := m.store.Selection.List()
-		m.render.JSON(w, http.StatusOK, ss)
+		writeJSON(w, ss)
 	}
 }
 
