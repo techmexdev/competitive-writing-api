@@ -1,0 +1,34 @@
+version: '3.7'
+services:
+  go_test:
+    build: 
+      context: ../../
+      dockerfile: ./cmd/Dockerfile
+      target: ${TEST_TARGET}
+      args:
+        - APP=server
+    container_name: go_test
+    env_file:
+      - ../../.secrets.env
+      - ../../.env
+    environment:
+      TEST_DSN: "postgres://scout:scout@postgres_test/scout?sslmode=disable"
+      TEST_REDIS_ADDRESS: "redis_test:6379"
+    external_links:
+      - postgres_test
+      - redis_test
+    volumes:
+      - ../../:/src/
+      - /src/vendor
+    networks:
+      - scout_test
+    secrets:
+      - google_app_creds_file
+
+networks:
+  scout_test:
+    name: scout_test
+
+secrets:
+  google_app_creds_file:
+    file: ../../application_credentials.json

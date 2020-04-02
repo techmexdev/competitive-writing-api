@@ -1,0 +1,4 @@
+- [-] Post comment on paragraph
+- [ ] Select best comment
+- [ ] See score in profile
+- [ ] See best comments in profile

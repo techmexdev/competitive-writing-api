@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres
+    container_name: cw_postgres
+
+  redis:
+    image: redis
+    container_name: cw_redis

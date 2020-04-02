@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  postgres_test:
+    image: postgres
+    container_name: postgres_test
+    env_file:
+      - ../../.secrets.env
+      - ../../.env
+    networks:
+      - scout_test
+    ports:
+      - 5433:5432
+
+  redis_test:
+    image: redis
+    container_name: redis_test
+    networks:
+      - scout_test
+    ports:
+      - 6380:6379
+
+networks:
+  scout_test:
+    name: scout_test

@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  server:
+    build: 
+      context: ../../
+      dockerfile: ./cmd/Dockerfile
+      target: ${TARGET}
+      args:
+        - APP=server
+    container_name: server
+    env_file:
+      - ../../.secrets.env
+      - ../../.env
+    environment:
+      GOOGLE_APP_CREDS_FILE: "/run/secrets/google_app_creds_file"
+      DSN: "postgres://scout:scout@postgres/scout?sslmode=disable"
+      REDIS_ADDRESS: "redis"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - /src/vendor
+      - ../../:/src/
+    networks:
+      - scout
+    ports:
+    - 8080:80
+    secrets:
+      - google_app_creds_file
+    
+networks:
+  scout:
+    name: scout
+
+secrets:
+  google_app_creds_file:
+    file: ../../application_credentials.json
